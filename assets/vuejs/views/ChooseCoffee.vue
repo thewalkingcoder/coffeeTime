@@ -5,12 +5,15 @@
     import Coffee from "./Coffee";
     import {mapActions, mapGetters} from 'vuex'
 
+    import VueSlider from 'vue-slider-component'
+    import 'vue-slider-component/theme/material.css'
 
     Vue.use(VueAxios, axios);
     export default {
         name: 'ChooseCoffee',
         components: {
-            Coffee
+            Coffee,
+            VueSlider
         },
         props: {
             url: {
@@ -19,6 +22,9 @@
         },
         data: function () {
             return {
+                sugar: {
+                    value: 0,
+                },
                 coffees: [
                     {
                         id: 1,
@@ -53,7 +59,7 @@
 
                 const formTracking = new FormData();
                 formTracking.append('coffeeSelect', JSON.stringify(this.getCoffee));
-
+                formTracking.append('sugarSelect', this.sugar.value);
                 this.addCommandProcess()
                 Vue.axios.post(this.url, formTracking, {
                     headers: {"content-Type": 'application/json'}
@@ -69,7 +75,7 @@
 
                     setTimeout(function () {
                         this.cancelCoffee()
-
+                        this.sugar.value = 0
                     }.bind(this), 6000)
                 })
                     .catch(error => {
@@ -83,7 +89,23 @@
                 'isCommandProcess',
                 'isCommandSend',
                 'isCommandCall'
-            ])
+            ]),
+            libelleSugar: function () {
+
+                switch (this.sugar.value) {
+                    case 1:
+                        return 'Juste un doigt !';
+                    case 2:
+                        return '2 pour le fun !';
+                    case 3:
+                        return '3 pour la route !';
+                    case 4:
+                        return '4 sinon rien !';
+                    case 5:
+                        return 'Ouiiii plein !';
+                }
+                return 'Non merci'
+            }
         }
 
     }
@@ -100,6 +122,15 @@
                         <coffee :coffee="coffee"></coffee>
                     </li>
                 </ul>
+            </div>
+            <div class="coffee_sugar text-left text-2xl">
+                <h2 class="mb-5">Un peu de sucre ? {{ libelleSugar }}</h2>
+                <vue-slider v-model="sugar.value"
+                            :min="0"
+                            :max="5"
+                            :interval="1"
+                            :marks="true"
+                />
             </div>
             <div class="mt-16 px-10 text-center">
                 <a @click="newCommand()"
