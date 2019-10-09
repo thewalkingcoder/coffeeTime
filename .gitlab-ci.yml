@@ -3,34 +3,26 @@ stages:
   - test
   - build
   - remote
-  - deploy_vendor
-  - deploy
-  - deploy_front
+  - deploy_dependencies
+  - deploy_hooks
 
-install_yarn:
+dependencies:
   stage: install
   script:
     - yarn install
-  artifacts:
-    expire_in: 35 mins
-    paths:
-      - node_modules/
-
-install_composer:
-  stage: install
-  script:
     - composer install
   artifacts:
     expire_in: 35 mins
     paths:
-      - vendor/
+      - node_modules/
+      - vendor
 
 test:
   stage: test
   script:
     - php bin/phpunit
   dependencies:
-    - install_composer
+    - dependencies
 
 build_prod_front:
   stage: build
@@ -53,30 +45,21 @@ remote_prod:
   only:
     - master
 
-deploy_prod_front:
-  stage: deploy_front
+deploy_dependencies:
+  stage: deploy_dependencies
   environment:
     name: production
   script:
     - rsync -e ssh -avz --delete-after public/build/ dev@l113301siedqual:/var/www/html/coffeetime/public/build/
-  only:
-    - master
-  dependencies:
-    - build_prod_front
-
-deploy_prod_back:
-  stage: deploy_vendor
-  environment:
-    name: production
-  script:
     - rsync -e ssh --delete-after --recursive vendor/ dev@l113301siedqual:/var/www/html/coffeetime/vendor/
   only:
     - master
   dependencies:
-    - install_composer
+    - build_prod_front
+    - dependencies
 
-deploy_prod:
-  stage: deploy
+deploy_prod_hooks:
+  stage: deploy_hooks
   environment:
     name: production
   script:
