@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Coffee Time !{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto flex justify-center items-center">
+        <div>
+            <div id="container-page">
+                <div class="bg-gray-200 page1_bloc text-center" data-anchor="p-start">
+                    <home></home>
+                </div>
+                <div class="bg-gray-300" id="page2" data-anchor="p-command">
+                    <choose-coffee url="{{ absolute_url(path('app_new_command')) }}"></choose-coffee>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var pageable = new Pageable('#container-page')
+
+    </script>
+{% endblock %}

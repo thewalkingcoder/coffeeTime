@@ -1,0 +1,85 @@
+stages:
+  - install
+  - test
+  - build
+  - remote
+  - deploy_vendor
+  - deploy
+  - deploy_front
+
+install_yarn:
+  stage: install
+  script:
+    - yarn install
+  artifacts:
+    expire_in: 35 mins
+    paths:
+      - node_modules/
+
+install_composer:
+  stage: install
+  script:
+    - composer install
+  artifacts:
+    expire_in: 35 mins
+    paths:
+      - vendor/
+
+test:
+  stage: test
+  script:
+    - php bin/phpunit
+  dependencies:
+    - install_composer
+
+build_prod_front:
+  stage: build
+  script:
+    - yarn build
+  artifacts:
+    expire_in: 35 mins
+    paths:
+      - public/build/
+  only:
+    - master
+
+remote_prod:
+  stage: remote
+  script:
+    - git checkout -B master origin/master
+    - git remote remove prod
+    - git remote add prod ssh://dev@l113301siedqual/home/dev/depot-git/coffeetime.git
+  allow_failure: true
+  only:
+    - master
+
+deploy_prod_front:
+  stage: deploy_front
+  environment:
+    name: production
+  script:
+    - rsync -e ssh -avz --delete-after public/build/ dev@l113301siedqual:/var/www/html/coffeetime/public/build/
+  only:
+    - master
+  dependencies:
+    - build_prod_front
+
+deploy_prod_back:
+  stage: deploy_vendor
+  environment:
+    name: production
+  script:
+    - rsync -e ssh --delete-after --recursive vendor/ dev@l113301siedqual:/var/www/html/coffeetime/vendor/
+  only:
+    - master
+  dependencies:
+    - install_composer
+
+deploy_prod:
+  stage: deploy
+  environment:
+    name: production
+  script:
+    - git push prod HEAD:master --force
+  only:
+    - master

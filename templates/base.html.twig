@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="https://fonts.googleapis.com/css?family=Courgette|Nunito|Lobster&display=swap" rel="stylesheet">
+            <link href="https://unpkg.com/pageable@latest/dist/pageable.min.css" rel="stylesheet">
+            {{ encore_entry_link_tags('app') }}
+            {{ encore_entry_link_tags('vuejs') }}
+        {% endblock %}
+    </head>
+    <body>
+    <div id="app">
+        {% block body %}{% endblock %}
+    </div>
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('vuejs') }}
+            <script src="https://unpkg.com/pageable@latest/dist/pageable.min.js"></script>
+        {% endblock %}
+    </body>
+</html>
