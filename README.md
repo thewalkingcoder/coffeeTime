@@ -24,3 +24,7 @@ yarn run server
 ```
 yarn run build
 ```
+
+## Déploiement
+
+voir le .gitlab-ci.yml
