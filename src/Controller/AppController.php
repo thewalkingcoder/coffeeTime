@@ -42,10 +42,10 @@ class AppController extends AbstractController
     {
         sleep('1');
         $coffeeJson = $request->request->get('coffeeSelect');
-
+        $sugar = $request->request->get('sugarSelect');
         $coffee = $serializer->deserialize($coffeeJson, Coffee::class, 'json');
         $commandeCoffee = new CommandCoffee($coffee->name);
-
+        $commandeCoffee->addSugar($sugar);
         $this->coffeeRepository->add($commandeCoffee);
 
         $numeroCommand = str_pad($commandeCoffee->getId(), 5, "0", STR_PAD_LEFT);

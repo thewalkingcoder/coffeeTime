@@ -35,6 +35,11 @@ class CommandCoffee
      */
     private $statut;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $sugar;
+
 
 
     public function __construct($coffee, ?\DateTime $dateCommand = null)
@@ -70,6 +75,21 @@ class CommandCoffee
         $this->statut = $statut;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getSugar()
+    {
+        return $this->sugar;
+    }
+
+    /**
+     * @param mixed $sugar
+     */
+    public function setSugar($sugar): void
+    {
+        $this->sugar = $sugar;
+    }
 
     public function setCoffee(string $coffee): self
     {
