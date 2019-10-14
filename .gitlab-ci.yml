@@ -40,7 +40,7 @@ remote_prod:
   script:
     - git checkout -B master origin/master
     - git remote remove prod
-    - git remote add prod ssh://dev@l113301siedqual/home/dev/depot-git/coffeetime.git
+    - git remote add prod ssh://SERVEUR/URLTOYOURDIR.git
   allow_failure: true
   only:
     - master
@@ -50,8 +50,8 @@ deploy_dependencies:
   environment:
     name: production
   script:
-    - rsync -e ssh -avz --delete-after public/build/ dev@l113301siedqual:/var/www/html/coffeetime/public/build/
-    - rsync -e ssh --delete-after --recursive vendor/ dev@l113301siedqual:/var/www/html/coffeetime/vendor/
+    - rsync -e ssh -avz --delete-after public/build/ COMPTEUR@SERVEUR:/URLTOYOURDIR/ASSET_PROD/
+    - rsync -e ssh --delete-after --recursive vendor/ COMPTEUR@SERVEUR:/URLTOYOURDIR/VENDOR_PROD/
   only:
     - master
   dependencies:

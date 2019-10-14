@@ -1,0 +1,22 @@
+chemin='/var/www/html/coffeetime'
+
+
+#Demande à GIT de mettre à jour le répertoire
+GIT_WORK_TREE=$chemin/ git checkout master -f
+
+#Save hash git version
+git log --pretty=format:"%d %h - %ad, %an : %s" HEAD -1 > $chemin/gitVersion.txt
+
+#On se position sur le répertoire de travail
+cd $chemin/
+
+#install assets
+php bin/console assets:install
+
+#clear cache prod
+php bin/console c:c
+php bin/console cache:warmup
+
+#Base de donnée
+php bin/console doctrine:database:create --if-not-exists
+php bin/console doctrine:migrations:migrate --no-interaction
