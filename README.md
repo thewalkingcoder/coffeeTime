@@ -4,19 +4,29 @@ Poc sur le mise en place de l'intégration continue
 
 ## Installation
 
+### Côté backend
+
+Copier .env en .env.local
+
+Modifier le fichier de configuration par rapport à votre environnement
+
+En suivant
+
 ```
+
 composer install
 
-```
-
-```
-yarn install
-```
-
-```
 php bin/console doctrine:database:create
 
 php bin/console doctrine:migration:migrate
+
+```
+### Côté frontend
+
+```
+yarn install
+
+yarn build
 
 ```
 
@@ -29,11 +39,6 @@ yarn run server
 
 Vérifier dans le package.json la configuration pour votre VM
 
-## Mise en production
-
-```
-yarn run build
-```
 
 ## Déploiement
 
