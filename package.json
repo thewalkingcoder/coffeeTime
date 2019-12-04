@@ -25,7 +25,7 @@
     "license": "UNLICENSED",
     "private": true,
     "scripts": {
-        "server": "encore dev-server --port 8083 --host 0.0.0.0 --public http://coffeetime.dev:8083 --disable-host-check",
+        "server": "encore dev-server --port 8083 --host 0.0.0.0 --public http://coffeetime.cnamts.local:8083 --disable-host-check",
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress",
